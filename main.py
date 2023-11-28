@@ -7,9 +7,14 @@ import json
 from weather_data import *
 
 class App(ctk.CTk):
-    def __init__(self):
+    def __init__(self,current_data,forecast_data,city,country):
 
-        self.color = WEATHER_DATA["Clear"]
+        # data
+        self.current_data = current_data
+        self.forecast_data = forecast_data
+        self.location = {"city":city,"country":country}
+        self.color = WEATHER_DATA[current_data["weather"]]
+
         super().__init__(fg_color=self.color["main"])
         self.geometry("550x250")
         self.minsize(550,250)
@@ -17,7 +22,7 @@ class App(ctk.CTk):
         self._set_appearance_mode("dark")
 
         # start widget
-        self.widget = SmallWidget(self)
+        self.widget = SmallWidget(self,self.current_data,self.location,self.color)
 
         # states
         self.height_break = 600
@@ -27,6 +32,8 @@ class App(ctk.CTk):
         self.bind("<Configure>",self.check_size)
         self.full_width_bool.trace("w",self.change_size)
         self.full_height_bool.trace("w",self.change_size)
+
+
 
         self.mainloop()
 
@@ -77,6 +84,5 @@ if __name__ == "__main__":
 
     current_data = get_weather(latitude,longtitute,"metric","today")
     forecast_data = get_weather(latitude,longtitute,"metric","forecast")
-    print(forecast_data)
 
-    App()
+    App(current_data=current_data,forecast_data=forecast_data,city=city,country=country)
