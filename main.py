@@ -2,6 +2,10 @@ import customtkinter as ctk
 from settings import *
 from main_widgets import *
 
+import urllib.request
+import json
+from weather_data import *
+
 class App(ctk.CTk):
     def __init__(self):
 
@@ -64,4 +68,15 @@ class App(ctk.CTk):
 
 
 if __name__ == "__main__":
+    with urllib.request.urlopen("https://ipapi.co/json/") as url:
+        data = json.loads(url.read().decode())
+        city = "London"
+        country = "Turkey"
+        latitude = 41.0652
+        longtitute = 28.9898
+
+    current_data = get_weather(latitude,longtitute,"metric","today")
+    forecast_data = get_weather(latitude,longtitute,"metric","forecast")
+    print(forecast_data)
+
     App()
