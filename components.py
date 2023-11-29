@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import datetime, calendar
+from image_widgets import *
 
 
 class SimplePanel(ctk.CTkFrame):
@@ -105,7 +106,7 @@ class DatePanel(ctk.CTkFrame):
                      text_color=color["text"]).pack(side="right",padx=10)
 
 class HorizontalForecastPanel(ctk.CTkFrame):
-    def __init__(self,parent,forecast_data,col,row,rowspan,divider_color):
+    def __init__(self,parent,forecast_data,col,row,rowspan,divider_color,forecast_images):
         super().__init__(parent,fg_color="#FFF")
         self.grid(column=col,row=row,rowspan=rowspan,sticky="nsew",padx=6,pady=6)
 
@@ -124,6 +125,7 @@ class HorizontalForecastPanel(ctk.CTkFrame):
             frame.rowconfigure(2, weight=1, uniform="a")
 
             # widgets
+            StaticImage(frame, forecast_images[index],0,0)
             ctk.CTkLabel(frame,text=f"{info[1]['temp']}\N{DEGREE SIGN}",text_color="#444",font=("Calibri", 22)).grid(row=1,column=0,sticky="n")
             ctk.CTkLabel(frame,text=weekday, text_color="#444").grid(row=2,column=0)
             frame.pack(side="left",expand=True,fill="both",padx=5,pady=5)
@@ -131,7 +133,7 @@ class HorizontalForecastPanel(ctk.CTkFrame):
                 ctk.CTkFrame(self,fg_color=divider_color,width=2).pack(side="left",fill="both")
 
 class VerticalForecastPanel(ctk.CTkFrame):
-    def __init__(self,parent,forecast_data,col,row,divider_color):
+    def __init__(self,parent,forecast_data,col,row,divider_color,forecast_images):
         super().__init__(parent,fg_color="#FFF")
         self.grid(column=col,row=row,sticky="nsew",padx=6,pady=6)
 
@@ -148,7 +150,7 @@ class VerticalForecastPanel(ctk.CTkFrame):
             frame.rowconfigure(0, weight=1, uniform="a")
 
             # widgets
-            
+            StaticImage(frame, forecast_images[index],0,3)
             ctk.CTkLabel(frame,text=weekday, text_color="#444").grid(row=0,column=0,sticky="e")
             ctk.CTkLabel(frame,text=f"{info[1]['temp']}\N{DEGREE SIGN}",text_color="#444",font=("Calibri", 22)).grid(row=0,column=2,sticky="e")
             frame.pack(expand=True,fill="both",padx=5,pady=5)

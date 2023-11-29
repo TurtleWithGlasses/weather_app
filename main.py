@@ -2,9 +2,12 @@ import customtkinter as ctk
 from settings import *
 from main_widgets import *
 
+# ulr request
 import urllib.request
 import json
 from weather_data import *
+
+from PIL import Image
 
 class App(ctk.CTk):
     def __init__(self,current_data,forecast_data,city,country):
@@ -14,6 +17,9 @@ class App(ctk.CTk):
         self.forecast_data = forecast_data
         self.location = {"city":city,"country":country}
         self.color = WEATHER_DATA[current_data["weather"]]
+
+        # forecast images
+        self.forecast_images = [Image.open(f"images/{info['weather']}.png") for info in self.forecast_data.values()]
 
         super().__init__(fg_color=self.color["main"])
         self.geometry("550x250")
@@ -32,8 +38,6 @@ class App(ctk.CTk):
         self.bind("<Configure>",self.check_size)
         self.full_width_bool.trace("w",self.change_size)
         self.full_height_bool.trace("w",self.change_size)
-
-
 
         self.mainloop()
 
@@ -63,7 +67,8 @@ class App(ctk.CTk):
                                      current_data = self.current_data,
                                      forecast_data = self.forecast_data,
                                      location = self.location,
-                                     color = self.color)
+                                     color = self.color,
+                                     forecast_images = self.forecast_images)
         
         # tall widget
         if self.full_height_bool.get() and not self.full_width_bool.get():
@@ -71,7 +76,8 @@ class App(ctk.CTk):
                                      current_data = self.current_data,
                                      forecast_data = self.forecast_data,
                                      location = self.location,
-                                     color = self.color)
+                                     color = self.color,
+                                     forecast_images = self.forecast_images)
         
         # wide widget
         if not self.full_height_bool.get() and self.full_width_bool.get():
@@ -79,7 +85,8 @@ class App(ctk.CTk):
                                      current_data = self.current_data,
                                      forecast_data = self.forecast_data,
                                      location = self.location,
-                                     color = self.color)
+                                     color = self.color,
+                                     forecast_images = self.forecast_images)
         
         # min widget
         if not self.full_height_bool.get() and not self.full_width_bool.get():
