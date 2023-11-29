@@ -67,11 +67,15 @@ class App(ctk.CTk):
         
         # wide widget
         if not self.full_height_bool.get() and self.full_width_bool.get():
-            self.widget = WideWidget(self)
+            self.widget = WideWidget(self,
+                                     current_data = self.current_data,
+                                     forecast_data = self.forecast_data,
+                                     location = self.location,
+                                     color = self.color)
         
         # min widget
         if not self.full_height_bool.get() and not self.full_width_bool.get():
-            self.widget = SmallWidget(self)
+            self.widget = SmallWidget(self,self.current_data,self.location,self.color)
 
 
 if __name__ == "__main__":
