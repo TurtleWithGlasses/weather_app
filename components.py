@@ -4,7 +4,7 @@ from image_widgets import *
 
 
 class SimplePanel(ctk.CTkFrame):
-    def __init__(self,parent,weather,col,row,color):
+    def __init__(self,parent,weather,col,row,color,animation):
         super().__init__(parent,fg_color=color["main"],corner_radius=0)
         self.grid(column=col,row=row,sticky="nsew")
 
@@ -25,8 +25,10 @@ class SimplePanel(ctk.CTkFrame):
                      text_color=color["text"]).pack()
         temp_frame.grid(row=0,column=0)
 
+        AnimatedImage(self,animation,0,1,color["main"])
+
 class SimpleTallPanel(ctk.CTkFrame):
-    def __init__(self,parent,weather,location,col,row,color):
+    def __init__(self,parent,weather,location,col,row,color, animation):
         super().__init__(parent,fg_color=color["main"],corner_radius=0)
         self.grid(column=col,row=row,sticky="nsew")
 
@@ -77,6 +79,8 @@ class SimpleTallPanel(ctk.CTkFrame):
         ctk.CTkLabel(info_frame,text=f"{weekday[:3]}, {day}{suffix} {calendar.month_name[month]}",
                      text_color=color["text"],
                      font=("Calibri",18)).grid(column=0,row=1)
+
+        AnimatedImage(self, animation, 3, 0, color["main"])
 
 class DatePanel(ctk.CTkFrame):
     def __init__(self,parent,location,col,row,color):

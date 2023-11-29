@@ -8,6 +8,7 @@ import json
 from weather_data import *
 
 from PIL import Image
+from os import walk
 
 class App(ctk.CTk):
     def __init__(self,current_data,forecast_data,city,country):
@@ -18,8 +19,9 @@ class App(ctk.CTk):
         self.location = {"city":city,"country":country}
         self.color = WEATHER_DATA[current_data["weather"]]
 
-        # forecast images
+        # image imports
         self.forecast_images = [Image.open(f"images/{info['weather']}.png") for info in self.forecast_data.values()]
+        self.today_animation = self.import_folder(self.color["path"])
 
         super().__init__(fg_color=self.color["main"])
         self.geometry("550x250")
@@ -28,7 +30,7 @@ class App(ctk.CTk):
         self._set_appearance_mode("dark")
 
         # start widget
-        self.widget = SmallWidget(self,self.current_data,self.location,self.color)
+        self.widget = SmallWidget(self,self.current_data,self.location,self.color,self.today_animation)
 
         # states
         self.height_break = 600
@@ -40,6 +42,14 @@ class App(ctk.CTk):
         self.full_height_bool.trace("w",self.change_size)
 
         self.mainloop()
+
+    def import_folder(self,path):
+        for _,__,image_data in walk(path):
+            sorted_data = sorted(image_data, key=lambda item:int(item.split(".")[0]))
+            image_paths = [path + "/" + item for item in sorted_data]
+        
+        images = [Image.open(path) for path in image_paths]
+        return images
 
     # check window size
     def check_size(self,event):
@@ -68,7 +78,8 @@ class App(ctk.CTk):
                                      forecast_data = self.forecast_data,
                                      location = self.location,
                                      color = self.color,
-                                     forecast_images = self.forecast_images)
+                                     forecast_images = self.forecast_images,
+                                     animation=self.today_animation)
         
         # tall widget
         if self.full_height_bool.get() and not self.full_width_bool.get():
@@ -77,7 +88,8 @@ class App(ctk.CTk):
                                      forecast_data = self.forecast_data,
                                      location = self.location,
                                      color = self.color,
-                                     forecast_images = self.forecast_images)
+                                     forecast_images = self.forecast_images,
+                                     animation=self.today_animation)
         
         # wide widget
         if not self.full_height_bool.get() and self.full_width_bool.get():
@@ -86,11 +98,12 @@ class App(ctk.CTk):
                                      forecast_data = self.forecast_data,
                                      location = self.location,
                                      color = self.color,
-                                     forecast_images = self.forecast_images)
+                                     forecast_images = self.forecast_images,
+                                     animation=self.today_animation)
         
         # min widget
         if not self.full_height_bool.get() and not self.full_width_bool.get():
-            self.widget = SmallWidget(self,self.current_data,self.location,self.color)
+            self.widget = SmallWidget(self,self.current_data,self.location,self.color, self.today_animation)
 
 
 if __name__ == "__main__":
