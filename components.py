@@ -130,6 +130,30 @@ class HorizontalForecastPanel(ctk.CTkFrame):
             if index < len(forecast_data) - 1:
                 ctk.CTkFrame(self,fg_color=divider_color,width=2).pack(side="left",fill="both")
 
+class VerticalForecastPanel(ctk.CTkFrame):
+    def __init__(self,parent,forecast_data,col,row,divider_color):
+        super().__init__(parent,fg_color="#FFF")
+        self.grid(column=col,row=row,sticky="nsew",padx=6,pady=6)
+
+        # widgets
+        for index, info in enumerate(forecast_data.items()):
+            frame = ctk.CTkFrame(self,fg_color="transparent")
+
+            # data
+            year, month, day = info[0].split("-")
+            weekday = list(calendar.day_name)[datetime.date(int(year), int(month), int(day)).weekday()]
+
+            # layout
+            frame.columnconfigure((0,1,2,3), weight=1, uniform="a")
+            frame.rowconfigure(0, weight=1, uniform="a")
+
+            # widgets
+            
+            ctk.CTkLabel(frame,text=weekday, text_color="#444").grid(row=0,column=0,sticky="e")
+            ctk.CTkLabel(frame,text=f"{info[1]['temp']}\N{DEGREE SIGN}",text_color="#444",font=("Calibri", 22)).grid(row=0,column=2,sticky="e")
+            frame.pack(expand=True,fill="both",padx=5,pady=5)
+            if index < len(forecast_data) - 1:
+                ctk.CTkFrame(self,fg_color=divider_color,height=2).pack(fill="x")
 
 def get_time_info():
     month = datetime.datetime.today().month
