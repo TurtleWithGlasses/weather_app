@@ -24,6 +24,59 @@ class SimplePanel(ctk.CTkFrame):
                      text_color=color["text"]).pack()
         temp_frame.grid(row=0,column=0)
 
+class SimpleTallPanel(ctk.CTkFrame):
+    def __init__(self,parent,weather,location,col,row,color):
+        super().__init__(parent,fg_color=color["main"],corner_radius=0)
+        self.grid(column=col,row=row,sticky="nsew")
+
+        # layout
+        self.columnconfigure(0,weight=1,uniform="a")
+        self.rowconfigure((0,2,4),weight=1,uniform="a")
+        self.rowconfigure(1,weight=2,uniform="a")
+        self.rowconfigure((3,5),weight=6,uniform="a")
+
+        # data
+        day, weekday, suffix, month = get_time_info()
+
+        # temperature
+        temp_frame = ctk.CTkFrame(self,fg_color="transparent")
+        ctk.CTkLabel(temp_frame,
+                    text=f"{weather['temp']}\N{DEGREE SIGN}",
+                    font=ctk.CTkFont(family="Calibri",size=50),
+                    text_color=color["text"]).pack()
+        ctk.CTkLabel(temp_frame,
+                    text=f"Feels like {weather['feels_like']}\N{DEGREE SIGN}",
+                    font=ctk.CTkFont(family="Calibri",size=16),
+                    text_color=color["text"]).pack()
+        temp_frame.grid(row=5,column=0)
+
+        # date & location
+        info_frame = ctk.CTkFrame(self,fg_color="transparent")
+        info_frame.columnconfigure(0,weight=1,uniform="a")
+        info_frame.rowconfigure((0,1),weight=1,uniform="a")
+        info_frame.grid(row=1,column=0)
+
+        # location
+        location_frame = ctk.CTkFrame(info_frame,fg_color="transparent")
+        ctk.CTkLabel(location_frame,
+                    text=f"{location['city']}, ",
+                    font=ctk.CTkFont(family="Calibri",
+                                    size=20,
+                                    weight="bold"),
+                    text_color=color["text"]).pack(side="left")
+        ctk.CTkLabel(location_frame,
+                    text=f"{location['country']}",
+                    font=ctk.CTkFont(family="Calibri",
+                                    size=20,
+                                    weight="bold"),
+                                    text_color=color["text"]).pack(side="left",padx=10)
+        location_frame.grid(column=0,row=0)
+
+        # date
+        ctk.CTkLabel(info_frame,text=f"{weekday[:3]}, {day}{suffix} {calendar.month_name[month]}",
+                     text_color=color["text"],
+                     font=("Calibri",18)).grid(column=0,row=1)
+
 class DatePanel(ctk.CTkFrame):
     def __init__(self,parent,location,col,row,color):
         super().__init__(parent,fg_color=color["main"],corner_radius=0)
@@ -51,7 +104,7 @@ class DatePanel(ctk.CTkFrame):
                      font=ctk.CTkFont(family="Calibri",size=20),
                      text_color=color["text"]).pack(side="right",padx=10)
 
-class HorizonralForecastPanel(ctk.CTkFrame):
+class HorizontalForecastPanel(ctk.CTkFrame):
     def __init__(self,parent,forecast_data,col,row,rowspan,divider_color):
         super().__init__(parent,fg_color="#FFF")
         self.grid(column=col,row=row,rowspan=rowspan,sticky="nsew",padx=6,pady=6)

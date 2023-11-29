@@ -63,7 +63,11 @@ class App(ctk.CTk):
         
         # tall widget
         if self.full_height_bool.get() and not self.full_width_bool.get():
-            self.widget = TallWidget(self)
+            self.widget = TallWidget(self,
+                                     current_data = self.current_data,
+                                     forecast_data = self.forecast_data,
+                                     location = self.location,
+                                     color = self.color)
         
         # wide widget
         if not self.full_height_bool.get() and self.full_width_bool.get():
@@ -81,10 +85,10 @@ class App(ctk.CTk):
 if __name__ == "__main__":
     with urllib.request.urlopen("https://ipapi.co/json/") as url:
         data = json.loads(url.read().decode())
-        city = "London"
-        country = "Turkey"
-        latitude = 41.0652
-        longtitute = 28.9898
+        city = data['city']
+        country = data['country_name']
+        latitude = data['latitude']
+        longtitute = data['longitude']
 
     current_data = get_weather(latitude,longtitute,"metric","today")
     forecast_data = get_weather(latitude,longtitute,"metric","forecast")
